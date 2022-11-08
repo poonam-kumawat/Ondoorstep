@@ -6,7 +6,6 @@ class AuthService {
   final user = FirebaseAuth.instance.currentUser;
 
   Future<void> signInMobile(String mobile, BuildContext context) async {
-    print('called here');
     try {
       await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: '+91$mobile',

@@ -40,7 +40,7 @@ class _OtpScreenState extends State<OtpScreen>{
               onPressed: () async{
                 if(_formKey.currentState!.validate()){
                   // ignore: avoid_print
-                  print(_codeController.text);
+                  Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
                 }
               },
               child: const Text('Submit'),
