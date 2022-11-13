@@ -30,7 +30,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           Positioned(
-            top: 130,
+            top: 120,
             right: 5,
             left: 5,
             child: Lottie.asset(
@@ -87,7 +87,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         _DotIndicator(isSelected: index == _currentIndex),
                     ],
                   ),
-                  const SizedBox(height: 75)
+                  const SizedBox(height: 80)
                 ],
               ),
             ),
@@ -181,17 +181,17 @@ class OnboardingModel {
 
 List<OnboardingModel> tabs = [
   OnboardingModel(
-    'assets/delivery-truck2.json',
+    'assets/tracking-my-package.json',
     'Choose Ondoorstep',
     'We don’t just move your stuff,\n we move your memories.',
   ),
   OnboardingModel(
-    'assets/delivery-truck.json',
+    'assets/gps-navigation.json',
     'Discover services',
     'The best move you’ll ever make \nYour move, our mission',
   ),
   OnboardingModel(
-    'assets/box-packing.json',
+    'assets/packaging-for-delivery.json',
     'Pick Up Or',
     'Moving your world, one box at a time \nRelocation is a breeze with us',
   ),
