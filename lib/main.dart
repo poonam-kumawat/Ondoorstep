@@ -1,28 +1,35 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
-import 'firebase_options.dart';
+import 'package:flutter/services.dart';
+import 'package:ondoorstep/profile/profile.dart';
+import 'package:ondoorstep/themes.dart';
+import 'package:ondoorstep/utils/user_preference.dart';
 
-void main() async {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const MyApp());
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget{
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  static final String title = 'User Profile';
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Firebase'),
-        ),
-        body: const Center(
-          child: Text('Hello World'),
+    final user = UserPreferences.myUser;
+
+    return ThemeProvider(
+      initTheme: user.isDarkMode ? MyThemes.darkTheme : MyThemes.lightTheme,
+      child: Builder(
+        builder: (context) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: user.isDarkMode ? MyThemes.darkTheme : MyThemes.lightTheme,
+          title: title,
+          home: ProfilePage(),
         ),
       ),
     );
