@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
 
-class MyPhone extends StatefulWidget {
-  const MyPhone({Key? key}) : super(key: key);
+class Register extends StatefulWidget {
+  const Register({Key? key}) : super(key: key);
 
   @override
-  State<MyPhone> createState() => _MyPhoneState();
+  State<Register> createState() => Registration();
 }
 
-class _MyPhoneState extends State<MyPhone> {
+class Registration extends State<Register> {
   TextEditingController countryController = TextEditingController();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    countryController.text = "+91";
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,26 +21,26 @@ class _MyPhoneState extends State<MyPhone> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/packing.png',
+                'assets/house.png',
                 width: 300,
                 height: 300,
               ),
               Text(
-                "Phone Verification",
+                "Registration",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 10,
               ),
               Text(
-                "We need to register your phone without getting started!",
+                "We need to register your Details without getting started!",
                 style: TextStyle(
                   fontSize: 16,
                 ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: 30,
+                height: 10,
               ),
               Container(
                 height: 55,
@@ -61,28 +54,42 @@ class _MyPhoneState extends State<MyPhone> {
                       width: 10,
                     ),
                     SizedBox(
-                      width: 40,
-                      child: TextField(
-                        controller: countryController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      ),
+                      width: 10,
                     ),
-                    Text(
-                      "|",
-                      style: TextStyle(fontSize: 33, color: Colors.grey),
+                    Expanded(
+                        child: TextField(
+                      keyboardType: TextInputType.name,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Name",
+                      ),
+                    ))
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 55,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 10,
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Expanded(
                         child: TextField(
-                      keyboardType: TextInputType.phone,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Phone",
+                        hintText: "Email",
                       ),
                     ))
                   ],
@@ -100,9 +107,9 @@ class _MyPhoneState extends State<MyPhone> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     onPressed: () {
-                      Navigator.pushNamed(context, 'verify');
+                      Navigator.pushNamed(context, '/');
                     },
-                    child: Text("Send the code")),
+                    child: Text("submit")),
               )
             ],
           ),
