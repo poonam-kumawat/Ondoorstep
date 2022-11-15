@@ -1,37 +1,27 @@
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:ondoorstep/profile/profile.dart';
-import 'package:ondoorstep/themes.dart';
-import 'package:ondoorstep/utils/user_preference.dart';
 
-Future main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-
-  runApp(MyApp());
+  await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  static final String title = 'User Profile';
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final user = UserPreferences.myUser;
-
-    return ThemeProvider(
-      initTheme: user.isDarkMode ? MyThemes.darkTheme : MyThemes.lightTheme,
-      child: Builder(
-        builder: (context) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: user.isDarkMode ? MyThemes.darkTheme : MyThemes.lightTheme,
-          title: title,
-          home: ProfilePage(),
-        ),
-      ),
+    return MaterialApp(
+      initialRoute: 'phone',
+      debugShowCheckedModeBanner: false,
+      routes: {
+        'phone': (context) => MyPhone(),
+        //'verify': (context) => MyVerify()
+      },
+      //routes: appRoutes,
     );
   }
 }
