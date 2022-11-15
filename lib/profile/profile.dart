@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Register extends StatefulWidget {
-  const Register({Key? key}) : super(key: key);
+class MyPhone extends StatefulWidget {
+  const MyPhone({Key? key}) : super(key: key);
 
   @override
-  State<Register> createState() => Registration();
+  State<MyPhone> createState() => _MyPhoneState();
 }
 
-class Registration extends State<Register> {
+class _MyPhoneState extends State<MyPhone> {
   TextEditingController countryController = TextEditingController();
 
   @override
@@ -26,14 +26,14 @@ class Registration extends State<Register> {
                 height: 300,
               ),
               Text(
-                "Registration",
+                "Register Yourself",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 10,
               ),
               Text(
-                "We need to register your Details without getting started!",
+                "We need to Register your Details Before getting started!",
                 style: TextStyle(
                   fontSize: 16,
                 ),
