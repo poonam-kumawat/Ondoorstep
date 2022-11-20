@@ -19,9 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         'phone': (context) => MyPhone(),
-        //'verify': (context) => MyVerify()
       },
-      //routes: appRoutes,
     );
   }
 }
