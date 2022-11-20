@@ -4,6 +4,8 @@ import 'package:ondoorstep/routes.dart';
 
 import 'package:ondoorstep/Login/login.dart';
 import 'package:ondoorstep/Login/otp.dart';
+import 'package:ondoorstep/Profile/profile.dart';
+import 'package:ondoorstep/dashboard/dashboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +23,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         'phone': (context) => MyPhone(),
-        'verify': (context) => MyVerify()
+        'verify': (context) => MyVerify(),
+        'profile': (context) => MyProfile(),
+        'dashboard': (context) => Dashboard()
       },
       //routes: appRoutes,
     );

@@ -99,7 +99,13 @@ class _MyVerifyState extends State<MyVerify> {
                         primary: Color.fromARGB(255, 61, 79, 119),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        'profile',
+                        (route) => false,
+                      );
+                    },
                     child: Text("Verify Phone Number")),
               ),
               Row(
