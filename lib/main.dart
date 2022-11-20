@@ -4,6 +4,7 @@ import 'package:ondoorstep/routes.dart';
 
 import 'package:ondoorstep/Login/login.dart';
 import 'package:ondoorstep/Login/otp.dart';
+import 'package:ondoorstep/profile/profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,11 +18,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: 'phone',
+      initialRoute: 'profile',
       debugShowCheckedModeBanner: false,
       routes: {
-        'phone': (context) => MyPhone(),
-        'verify': (context) => MyVerify()
+        // 'phone': (context) => MyPhone(),
+        // 'verify': (context) => MyVerify()
+        'profile': (context) => MyProfile(
+              email: '',
+              fullName: '',
+            )
       },
       //routes: appRoutes,
     );
