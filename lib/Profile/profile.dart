@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:ondoorstep/Login/otp.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyProfile extends StatefulWidget {
-  const MyProfile({Key? key}) : super(key: key);
-
+  final String name;
+  final String email;
+  const MyProfile({Key? key, required this.name, required this.email})
+      : super(key: key);
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'Email': email,
+      };
   @override
   State<MyProfile> createState() => _MyProfileState();
 }
 
 class _MyProfileState extends State<MyProfile> {
-  TextEditingController countryController = TextEditingController();
-
+  //TextEditingController countryController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +67,7 @@ class _MyProfileState extends State<MyProfile> {
                     ),
                     Expanded(
                         child: TextField(
+                      controller: _nameController,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -86,6 +96,7 @@ class _MyProfileState extends State<MyProfile> {
                     ),
                     Expanded(
                         child: TextField(
+                      controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -106,7 +117,12 @@ class _MyProfileState extends State<MyProfile> {
                         primary: Color.fromARGB(255, 61, 79, 119),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                    onPressed: () {
+                    onPressed: () async {
+                      final user = MyProfile(
+                        name: _nameController.text,
+                        email: _emailController.text,
+                      );
+                      createUser(user);
                       Navigator.pushNamed(context, 'dashboard');
                     },
                     child: Text("submit")),
@@ -116,5 +132,11 @@ class _MyProfileState extends State<MyProfile> {
         ),
       ),
     );
+  }
+
+  Future createUser(MyProfile user) async {
+    final docUser = FirebaseFirestore.instance.collection('users').doc();
+    final json = user.toJson();
+    await docUser.set(json);
   }
 }

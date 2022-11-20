@@ -24,7 +24,10 @@ class MyApp extends StatelessWidget {
       routes: {
         'phone': (context) => MyPhone(),
         'verify': (context) => MyVerify(),
-        'profile': (context) => MyProfile(),
+        'profile': (context) => MyProfile(
+              email: '',
+              name: '',
+            ),
         'dashboard': (context) => Dashboard()
       },
       //routes: appRoutes,
