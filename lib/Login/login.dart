@@ -1,8 +1,15 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:ondoorstep/services/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyPhone extends StatefulWidget {
-  const MyPhone({Key? key}) : super(key: key);
+  final String number;
+  const MyPhone({Key? key, required this.number}) : super(key: key);
+  Map<String, dynamic> toJson() => {
+        'Mobile no': number,
+      };
 
   @override
   State<MyPhone> createState() => _MyPhoneState();
@@ -10,6 +17,7 @@ class MyPhone extends StatefulWidget {
 
 class _MyPhoneState extends State<MyPhone> {
   TextEditingController countryController = TextEditingController();
+  final TextEditingController _numberController = TextEditingController();
 
   @override
   void initState() {
@@ -80,6 +88,7 @@ class _MyPhoneState extends State<MyPhone> {
                     ),
                     Expanded(
                         child: TextField(
+                      controller: _numberController,
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -100,7 +109,11 @@ class _MyPhoneState extends State<MyPhone> {
                         primary: Color.fromARGB(255, 61, 79, 119),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                    onPressed: () {
+                    onPressed: () async {
+                      final mobileno = MyPhone(
+                        number: _numberController.text,
+                      );
+                      createPhone(mobileno);
                       Navigator.pushNamed(context, 'verify');
                     },
                     child: Text("Send the code")),
@@ -110,5 +123,11 @@ class _MyPhoneState extends State<MyPhone> {
         ),
       ),
     );
+  }
+
+  Future createPhone(MyPhone user) async {
+    final docUser = FirebaseFirestore.instance.collection('mobileno').doc();
+    final json = user.toJson();
+    await docUser.set(json);
   }
 }

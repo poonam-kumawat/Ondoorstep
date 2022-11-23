@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
       initialRoute: 'phone',
       debugShowCheckedModeBanner: false,
       routes: {
-        'phone': (context) => MyPhone(),
+        'phone': (context) => MyPhone(
+              number: '',
+            ),
         'verify': (context) => MyVerify(),
         'profile': (context) => MyProfile(
               email: '',
