@@ -1,9 +1,14 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ondoorstep/dashboard/searchScreen.dart';
 import 'package:ondoorstep/maps/DividerWidget.dart';
@@ -16,12 +21,18 @@ import '../maps/assistantMethods.dart';
 
 import '../maps/assistantMethods.dart';
 
-class Dashboard extends StatelessWidget {
-  late BuildContext context;
+class Dashboard extends StatefulWidget {
+  var context;
 
-  Dashboard({super.key});
+  Dashboard({Key? key}) : super(key: key);
 
-  Completer<GoogleMapController> _controllerGooglemap = Completer();
+  @override
+  State<StatefulWidget> createState() {
+    return DashboardState();
+  }
+}
+
+class DashboardState extends State<Dashboard> {
   //polyline
   List<LatLng> pLineCoordinates = [];
   Set<Polyline> polylineSet = {};
@@ -49,11 +60,21 @@ class Dashboard extends StatelessWidget {
   }
 
   late GoogleMapController newGoogleMapController;
+  Completer<GoogleMapController> _controllerGooglemap = Completer();
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
+
+  late String _mapStyle;
+  @override
+  void initState() {
+    super.initState();
+    rootBundle.loadString('assets/google.txt').then((string) {
+      _mapStyle = string;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +83,7 @@ class Dashboard extends StatelessWidget {
       children: [
         GoogleMap(
           padding: EdgeInsets.only(bottom: bottomPaddingOfMap),
-          mapType: MapType.normal,
+          //mapType: MapType.normal,
           myLocationButtonEnabled: true,
           initialCameraPosition: _kGooglePlex,
           myLocationEnabled: true,
@@ -74,6 +95,7 @@ class Dashboard extends StatelessWidget {
           onMapCreated: (GoogleMapController controller) {
             _controllerGooglemap.complete(controller);
             newGoogleMapController = controller;
+            newGoogleMapController.setMapStyle(_mapStyle);
 
             locatePostion();
           },
@@ -267,6 +289,131 @@ class Dashboard extends StatelessWidget {
             ),
           ),
         ),
+        Positioned(
+          bottom: 0.0,
+          left: 0.0,
+          right: 0.0,
+          child: Container(
+            height: 230.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0)),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromARGB(255, 236, 237, 240),
+                  blurRadius: 16.0,
+                  spreadRadius: 0.5,
+                  offset: Offset(0.7, 0.7),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 17.0),
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    //color: Color.fromARGB(255, 240, 243, 242),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            "assets/truck.png",
+                            height: 70.0,
+                            width: 80.0,
+                          ),
+                          SizedBox(
+                            width: 16.0,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Truck",
+                                style: TextStyle(
+                                    fontSize: 18.0, fontFamily: "Brand-Bold"),
+                              ),
+                              Text(
+                                "Able to carry this much tone",
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Color.fromARGB(255, 74, 111, 158)),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          FontAwesomeIcons.moneyCheck,
+                          size: 18.0,
+                          color: Colors.black54,
+                        ),
+                        SizedBox(
+                          width: 16.0,
+                        ),
+                        Text("Cash"),
+                        SizedBox(
+                          width: 6.0,
+                        ),
+                        Icon(Icons.keyboard_arrow_down,
+                            color: Colors.black54, size: 16.0),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 24.0,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Color.fromARGB(255, 58, 81, 122),
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(24.0),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(17.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Request",
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontFamily: "Brand-Bold",
+                                  color: Colors.white),
+                            ),
+                            Icon(
+                              FontAwesomeIcons.truck,
+                              color: Colors.white,
+                              size: 26.0,
+                            ),
+                          ],
+                        ),
+                      ),
+                      onPressed: () {
+                        print("Requesting a truck");
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     ));
   }
@@ -377,5 +524,3 @@ class Dashboard extends StatelessWidget {
     });
   }
 }
-
-void setState(Null Function() param0) {}
