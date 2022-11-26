@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:flutter/material.dart';
@@ -34,7 +32,12 @@ class Dashboard extends StatefulWidget {
 }
 
 class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
-  late DirectionsDetails tripDirectionDetails;
+  DirectionsDetails tripDirectionDetails = DirectionsDetails(
+      distanceText: '',
+      distanceValue: 0,
+      durationValue: 0,
+      durationText: '',
+      encodedPoints: '');
   //polyline
   List<LatLng> pLineCoordinates = [];
   Set<Polyline> polylineSet = {};
@@ -477,6 +480,26 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               ),
             ),
           ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(22.0),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(255, 241, 243, 245),
+                blurRadius: 6.0,
+                spreadRadius: 0.5,
+                offset: Offset(0.7, 0.7),
+              ),
+            ],
+          ),
+          height: 250.0,
+          child: Column(children: [
+            SizedBox(
+              height: 12.0,
+            ),
+          ]),
         ),
       ],
     ));

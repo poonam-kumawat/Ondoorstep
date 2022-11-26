@@ -11,24 +11,14 @@ class DividerWidget extends StatelessWidget {
         children: [
           Expanded(
             child: Divider(
-              color: Colors.grey,
+              color: Color.fromARGB(255, 223, 221, 221),
               thickness: 1.5,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              "OR",
-              style: TextStyle(
-                color: Colors.grey,
-                fontWeight: FontWeight.w600,
-              ),
             ),
           ),
           Expanded(
             child: Divider(
-              color: Colors.grey,
-              thickness: 1.5,
+              color: Color.fromARGB(255, 223, 221, 221),
+              thickness: 1.0,
             ),
           ),
         ],
