@@ -14,6 +14,7 @@ import 'package:ondoorstep/dashboard/searchScreen.dart';
 import 'package:ondoorstep/maps/DividerWidget.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:ondoorstep/maps/Models/directionsDetails.dart';
 import 'package:provider/provider.dart';
 
 import '../Datahandler/appData.dart';
@@ -33,6 +34,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
+  late DirectionsDetails tripDirectionDetails;
   //polyline
   List<LatLng> pLineCoordinates = [];
   Set<Polyline> polylineSet = {};
@@ -42,12 +44,29 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   double rideDetailContainer = 0;
   double searchContainerHeight = 300.0;
 
+  bool drawerOpen = true;
+
+  resetApp() {
+    setState(() {
+      drawerOpen = true;
+      searchContainerHeight = 300.0;
+      rideDetailContainer = 0;
+      polylineSet.clear();
+      markersSet.clear();
+      circlesSet.clear();
+      pLineCoordinates.clear();
+    });
+
+    locatePostion();
+  }
+
   void displayRiderDetailsContainer() async {
     await getPlaceDirection();
     setState(() {
       searchContainerHeight = 0;
       rideDetailContainer = 240;
       bottomPaddingOfMap = 230;
+      drawerOpen = false;
     });
   }
 
@@ -114,11 +133,16 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         ),
         //HamburgerButton(),
         Positioned(
-          top: 45.0,
+          top: 38.0,
           left: 22.0,
           child: GestureDetector(
             onTap: () {
-              Scaffold.of(context).openDrawer();
+              if (drawerOpen) {
+                var scaffoldKey;
+                scaffoldKey.currentState!.openDrawer();
+              } else {
+                resetApp();
+              }
             },
             child: Container(
               decoration: BoxDecoration(
@@ -131,11 +155,11 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                         spreadRadius: 0.5,
                         offset: const Offset(0.7, 0.7))
                   ]),
-              child: const CircleAvatar(
+              child: CircleAvatar(
                 backgroundColor: Colors.white,
                 radius: 20.0,
                 child: Icon(
-                  Icons.menu,
+                  (drawerOpen) ? Icons.menu : Icons.close,
                   color: Color.fromARGB(255, 53, 64, 99),
                 ),
               ),
@@ -358,13 +382,31 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                       fontSize: 18.0, fontFamily: "Brand-Bold"),
                                 ),
                                 Text(
-                                  "Able to carry this much tone",
+                                  ((tripDirectionDetails != null)
+                                          ? tripDirectionDetails!.distanceText
+                                          : "") +
+                                      " - " +
+                                      ((tripDirectionDetails != null)
+                                          ? tripDirectionDetails!.durationText
+                                          : ""),
                                   style: TextStyle(
                                       fontSize: 12.0,
                                       color: Color.fromARGB(255, 74, 111, 158)),
                                 ),
                               ],
                             ),
+                            Expanded(
+                                child: Container(
+                              child: Text(
+                                ((tripDirectionDetails.durationText != null)
+                                    ? '\$${AssistantMethods.calculateFares(tripDirectionDetails)}'
+                                    : ''),
+                                style: TextStyle(
+                                    fontFamily: 'Brand-Bold',
+                                    fontSize: 12.0,
+                                    color: Color.fromARGB(255, 74, 111, 158)),
+                              ),
+                            )),
                           ],
                         ),
                       ),
@@ -454,6 +496,9 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             ));
     var details = await AssistantMethods.obtainPlaceDirectionDetails(
         pickUpLatLng, dropOffLatLng);
+    setState(() {
+      tripDirectionDetails = details!;
+    });
     Navigator.pop(context);
     print("This is encoded points :: ");
     print(details!.encodedPoints);
