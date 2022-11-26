@@ -32,12 +32,24 @@ class Dashboard extends StatefulWidget {
   }
 }
 
-class DashboardState extends State<Dashboard> {
+class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   //polyline
   List<LatLng> pLineCoordinates = [];
   Set<Polyline> polylineSet = {};
   Set<Marker> markersSet = {};
   Set<Circle> circlesSet = {};
+
+  double rideDetailContainer = 0;
+  double searchContainerHeight = 300.0;
+
+  void displayRiderDetailsContainer() async {
+    await getPlaceDirection();
+    setState(() {
+      searchContainerHeight = 0;
+      rideDetailContainer = 240;
+      bottomPaddingOfMap = 230;
+    });
+  }
 
   late Position currentPosition;
   var geoLocator = Geolocator();
@@ -135,157 +147,162 @@ class DashboardState extends State<Dashboard> {
           left: 0.0,
           right: 0.0,
           bottom: 0.0,
-          child: Container(
-            height: 300.0,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(18.0),
-                  topRight: Radius.circular(18.0)),
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromARGB(255, 236, 237, 240),
-                  blurRadius: 16.0,
-                  spreadRadius: 0.5,
-                  offset: Offset(0.7, 0.7),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 18.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 6.9,
-                    ),
-                    Text(
-                      "Hi there,",
-                      style: TextStyle(fontSize: 10.0),
-                    ),
-                    Text(
-                      "Where to,",
-                      style:
-                          TextStyle(fontSize: 20.0, fontFamily: 'Brand-Bold'),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        var res = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SearchScreen()));
-                        if (res == "obtainDirection") {
-                          await getPlaceDirection();
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 236, 237, 240),
-                              blurRadius: 6.0,
-                              spreadRadius: 0.5,
-                              offset: Offset(0.7, 0.7),
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.search,
-                                color: Color.fromARGB(255, 58, 81, 122),
+          child: AnimatedSize(
+            vsync: this,
+            curve: Curves.bounceIn,
+            duration: const Duration(milliseconds: 160),
+            child: Container(
+              height: searchContainerHeight,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(18.0),
+                    topRight: Radius.circular(18.0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromARGB(255, 236, 237, 240),
+                    blurRadius: 16.0,
+                    spreadRadius: 0.5,
+                    offset: Offset(0.7, 0.7),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 18.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 6.9,
+                      ),
+                      Text(
+                        "Hi there,",
+                        style: TextStyle(fontSize: 10.0),
+                      ),
+                      Text(
+                        "Where to,",
+                        style:
+                            TextStyle(fontSize: 20.0, fontFamily: 'Brand-Bold'),
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          var res = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchScreen()));
+                          if (res == "obtainDirection") {
+                            displayRiderDetailsContainer();
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromARGB(255, 236, 237, 240),
+                                blurRadius: 6.0,
+                                spreadRadius: 0.5,
+                                offset: Offset(0.7, 0.7),
                               ),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              Text("Search Drop Off"),
                             ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.search,
+                                  color: Color.fromARGB(255, 58, 81, 122),
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Text("Search Drop Off"),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 24.0,
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.home,
-                          color: Color.fromARGB(255, 58, 81, 122),
-                        ),
-                        SizedBox(
-                          width: 12.0,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              Provider.of<AppData>(context).pickupLocation !=
-                                      null
-                                  ? Provider.of<AppData>(context)
-                                      .pickupLocation!
-                                      .placeName
-                                  : "Add Home",
-                              style: TextStyle(
-                                  fontSize: 18.0, fontFamily: 'Brand-Bold'),
-                            ),
-                            SizedBox(
-                              height: 4.0,
-                            ),
-                            Text(
-                              "Your residential address",
-                              style: TextStyle(
-                                  fontSize: 12.0, color: Colors.black54),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    DividerWidget(),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.work,
-                          color: Color.fromARGB(255, 58, 81, 122),
-                        ),
-                        SizedBox(
-                          width: 12.0,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Add Work",
-                              style: TextStyle(
-                                  fontSize: 18.0, fontFamily: 'Brand-Bold'),
-                            ),
-                            SizedBox(
-                              height: 4.0,
-                            ),
-                            Text(
-                              "Your office address",
-                              style: TextStyle(
-                                  fontSize: 12.0, color: Colors.black54),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ]),
+                      SizedBox(
+                        height: 24.0,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.home,
+                            color: Color.fromARGB(255, 58, 81, 122),
+                          ),
+                          SizedBox(
+                            width: 12.0,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                Provider.of<AppData>(context).pickupLocation !=
+                                        null
+                                    ? Provider.of<AppData>(context)
+                                        .pickupLocation!
+                                        .placeName
+                                    : "Add Home",
+                                style: TextStyle(
+                                    fontSize: 18.0, fontFamily: 'Brand-Bold'),
+                              ),
+                              SizedBox(
+                                height: 4.0,
+                              ),
+                              Text(
+                                "Your residential address",
+                                style: TextStyle(
+                                    fontSize: 12.0, color: Colors.black54),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      DividerWidget(),
+                      SizedBox(
+                        height: 16.0,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.work,
+                            color: Color.fromARGB(255, 58, 81, 122),
+                          ),
+                          SizedBox(
+                            width: 12.0,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Add Work",
+                                style: TextStyle(
+                                    fontSize: 18.0, fontFamily: 'Brand-Bold'),
+                              ),
+                              SizedBox(
+                                height: 4.0,
+                              ),
+                              Text(
+                                "Your office address",
+                                style: TextStyle(
+                                    fontSize: 12.0, color: Colors.black54),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ]),
+              ),
             ),
           ),
         ),
@@ -293,123 +310,128 @@ class DashboardState extends State<Dashboard> {
           bottom: 0.0,
           left: 0.0,
           right: 0.0,
-          child: Container(
-            height: 230.0,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.0),
-                  topRight: Radius.circular(16.0)),
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromARGB(255, 236, 237, 240),
-                  blurRadius: 16.0,
-                  spreadRadius: 0.5,
-                  offset: Offset(0.7, 0.7),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 17.0),
-              child: Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    //color: Color.fromARGB(255, 240, 243, 242),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            "assets/truck.png",
-                            height: 70.0,
-                            width: 80.0,
-                          ),
-                          SizedBox(
-                            width: 16.0,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Truck",
-                                style: TextStyle(
-                                    fontSize: 18.0, fontFamily: "Brand-Bold"),
-                              ),
-                              Text(
-                                "Able to carry this much tone",
-                                style: TextStyle(
-                                    fontSize: 12.0,
-                                    color: Color.fromARGB(255, 74, 111, 158)),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+          child: AnimatedSize(
+            vsync: this,
+            curve: Curves.bounceIn,
+            duration: const Duration(milliseconds: 160),
+            child: Container(
+              height: rideDetailContainer,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16.0),
+                    topRight: Radius.circular(16.0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromARGB(255, 236, 237, 240),
+                    blurRadius: 16.0,
+                    spreadRadius: 0.5,
+                    offset: Offset(0.7, 0.7),
                   ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Row(
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.moneyCheck,
-                          size: 18.0,
-                          color: Colors.black54,
-                        ),
-                        SizedBox(
-                          width: 16.0,
-                        ),
-                        Text("Cash"),
-                        SizedBox(
-                          width: 6.0,
-                        ),
-                        Icon(Icons.keyboard_arrow_down,
-                            color: Colors.black54, size: 16.0),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 24.0,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Color.fromARGB(255, 58, 81, 122),
-                        shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(24.0),
-                        ),
-                      ),
+                ],
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 17.0),
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      //color: Color.fromARGB(255, 240, 243, 242),
                       child: Padding(
-                        padding: const EdgeInsets.all(17.0),
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "Request",
-                              style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontFamily: "Brand-Bold",
-                                  color: Colors.white),
+                            Image.asset(
+                              "assets/truck.png",
+                              height: 70.0,
+                              width: 80.0,
                             ),
-                            Icon(
-                              FontAwesomeIcons.truck,
-                              color: Colors.white,
-                              size: 26.0,
+                            SizedBox(
+                              width: 16.0,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Truck",
+                                  style: TextStyle(
+                                      fontSize: 18.0, fontFamily: "Brand-Bold"),
+                                ),
+                                Text(
+                                  "Able to carry this much tone",
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: Color.fromARGB(255, 74, 111, 158)),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
-                      onPressed: () {
-                        print("Requesting a truck");
-                      },
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.moneyCheck,
+                            size: 18.0,
+                            color: Colors.black54,
+                          ),
+                          SizedBox(
+                            width: 16.0,
+                          ),
+                          Text("Cash"),
+                          SizedBox(
+                            width: 6.0,
+                          ),
+                          Icon(Icons.keyboard_arrow_down,
+                              color: Colors.black54, size: 16.0),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 24.0,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Color.fromARGB(255, 58, 81, 122),
+                          shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(24.0),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(17.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Request",
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontFamily: "Brand-Bold",
+                                    color: Colors.white),
+                              ),
+                              Icon(
+                                FontAwesomeIcons.truck,
+                                color: Colors.white,
+                                size: 26.0,
+                              ),
+                            ],
+                          ),
+                        ),
+                        onPressed: () {
+                          print("Requesting a truck");
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
