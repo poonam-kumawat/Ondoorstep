@@ -1,12 +1,12 @@
+// ignore_for_file: unnecessary_new
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
 
-import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ondoorstep/dashboard/searchScreen.dart';
 import 'package:ondoorstep/maps/DividerWidget.dart';
@@ -16,8 +16,6 @@ import 'package:ondoorstep/maps/Models/directionsDetails.dart';
 import 'package:provider/provider.dart';
 
 import '../Datahandler/appData.dart';
-import '../maps/assistantMethods.dart';
-
 import '../maps/assistantMethods.dart';
 
 class Dashboard extends StatefulWidget {
@@ -73,7 +71,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     });
   }
 
-  Position currentPosition = Position(
+  Position currentPosition = const Position(
       longitude: 0,
       latitude: 0,
       timestamp: null,
@@ -100,14 +98,15 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
     String address =
+        // ignore: use_build_context_synchronously
         await AssistantMethods.searchCoordinateAddress(position, context);
-    print("This is your address :: " + address);
+    print("This is your address :: $address");
   }
 
   late GoogleMapController newGoogleMapController;
-  Completer<GoogleMapController> _controllerGooglemap = Completer();
+  final Completer<GoogleMapController> _controllerGooglemap = Completer();
 
-  static final CameraPosition _kGooglePlex = const CameraPosition(
+  static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -132,7 +131,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           initialCameraPosition: _kGooglePlex,
           myLocationEnabled: true,
           zoomGesturesEnabled: true,
-          zoomControlsEnabled: true,
+          zoomControlsEnabled: false,
           polylines: polylineSet,
           markers: markersSet,
           circles: circlesSet,
@@ -143,7 +142,6 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             setState(() {
               bottomPaddingOfMap = 300.0;
             });
-
             locatePostion();
           },
         ),
@@ -154,6 +152,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           child: GestureDetector(
             onTap: () {
               if (drawerOpen) {
+                // ignore: prefer_typing_uninitialized_variables
                 var scaffoldKey;
                 scaffoldKey.currentState!.openDrawer();
               } else {
@@ -164,8 +163,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(22.0),
-                  boxShadow: [
-                    const BoxShadow(
+                  boxShadow: const [
+                    BoxShadow(
                         color: Color.fromARGB(255, 232, 230, 235),
                         blurRadius: 6.0,
                         spreadRadius: 0.5,
@@ -188,6 +187,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           right: 0.0,
           bottom: 0.0,
           child: AnimatedSize(
+            // ignore: deprecated_member_use
             vsync: this,
             curve: Curves.bounceIn,
             duration: const Duration(milliseconds: 160),
@@ -242,8 +242,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5.0),
-                            boxShadow: [
-                              const BoxShadow(
+                            boxShadow: const [
+                              BoxShadow(
                                 color: Color.fromARGB(255, 236, 237, 240),
                                 blurRadius: 6.0,
                                 spreadRadius: 0.5,
@@ -254,15 +254,15 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: Row(
-                              children: [
-                                const Icon(
+                              children: const [
+                                Icon(
                                   Icons.search,
                                   color: Color.fromARGB(255, 58, 81, 122),
                                 ),
-                                const SizedBox(
+                                SizedBox(
                                   width: 10.0,
                                 ),
-                                const Text("Search Drop Off"),
+                                Text("Search Drop Off"),
                               ],
                             ),
                           ),
@@ -323,16 +323,16 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
+                            children: const [
+                              Text(
                                 "Add Work",
                                 style: TextStyle(
                                     fontSize: 18.0, fontFamily: 'Brand-Bold'),
                               ),
-                              const SizedBox(
+                              SizedBox(
                                 height: 4.0,
                               ),
-                              const Text(
+                              Text(
                                 "Your office address",
                                 style: TextStyle(
                                     fontSize: 12.0, color: Colors.black54),
@@ -374,7 +374,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 padding: const EdgeInsets.symmetric(vertical: 17.0),
                 child: Column(
                   children: [
-                    Container(
+                    SizedBox(
                       width: double.infinity,
                       //color: Color.fromARGB(255, 240, 243, 242),
                       child: Padding(
@@ -398,13 +398,10 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                       fontSize: 18.0, fontFamily: "Brand-Bold"),
                                 ),
                                 Text(
-                                  ((tripDirectionDetails != null)
-                                          ? tripDirectionDetails!.distanceText
-                                          : "") +
-                                      " - " +
-                                      ((tripDirectionDetails != null)
-                                          ? tripDirectionDetails!.durationText
-                                          : ""),
+                                  // ignore: unnecessary_null_comparison
+                                  "${(tripDirectionDetails != null) ? tripDirectionDetails.distanceText
+                                      // ignore: unnecessary_null_comparison
+                                      : ""} - ${(tripDirectionDetails != null) ? tripDirectionDetails.durationText : ""}",
                                   style: const TextStyle(
                                       fontSize: 12.0,
                                       color: Color.fromARGB(255, 74, 111, 158)),
@@ -433,20 +430,20 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Row(
-                        children: [
-                          const Icon(
+                        children: const [
+                          Icon(
                             FontAwesomeIcons.moneyCheck,
                             size: 18.0,
                             color: Colors.black54,
                           ),
-                          const SizedBox(
+                          SizedBox(
                             width: 16.0,
                           ),
-                          const Text("Cash"),
-                          const SizedBox(
+                          Text("Cash"),
+                          SizedBox(
                             width: 6.0,
                           ),
-                          const Icon(Icons.keyboard_arrow_down,
+                          Icon(Icons.keyboard_arrow_down,
                               color: Colors.black54, size: 16.0),
                         ],
                       ),
@@ -459,23 +456,23 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           primary: const Color.fromARGB(255, 58, 81, 122),
-                          shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(24.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24.0),
                           ),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(17.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
+                            children: const [
+                              Text(
                                 "Request",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontFamily: "Brand-Bold",
                                     color: Colors.white),
                               ),
-                              const Icon(
+                              Icon(
                                 FontAwesomeIcons.truck,
                                 color: Colors.white,
                                 size: 26.0,
@@ -498,8 +495,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(22.0),
-            boxShadow: [
-              const BoxShadow(
+            boxShadow: const [
+              BoxShadow(
                 color: Color.fromARGB(255, 241, 243, 245),
                 blurRadius: 6.0,
                 spreadRadius: 0.5,
@@ -508,8 +505,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             ],
           ),
           height: 250.0,
-          child: Column(children: [
-            const SizedBox(
+          child: Column(children: const [
+            SizedBox(
               height: 12.0,
             ),
           ]),
@@ -535,6 +532,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     setState(() {
       tripDirectionDetails = details!;
     });
+    // ignore: use_build_context_synchronously
     Navigator.pop(context);
     print("This is encoded points :: ");
     print(details!.encodedPoints);
@@ -545,10 +543,10 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
 
     pLineCoordinates.clear();
     if (decodedPolyLinePointsResult.isNotEmpty) {
-      decodedPolyLinePointsResult.forEach((PointLatLng pointLatLng) {
+      for (var pointLatLng in decodedPolyLinePointsResult) {
         pLineCoordinates
             .add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
-      });
+      }
     }
     polylineSet.clear();
     setState(() {

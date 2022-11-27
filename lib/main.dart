@@ -24,11 +24,8 @@ class MyApp extends StatelessWidget {
         initialRoute: 'dashboard',
         debugShowCheckedModeBanner: false,
         routes: {
-          // 'phone': (context) => MyPhone(),
-          // 'verify': (context) => MyVerify()
           'dashboard': (context) => Dashboard(),
         },
-        //routes: appRoutes,
       ),
     );
   }
