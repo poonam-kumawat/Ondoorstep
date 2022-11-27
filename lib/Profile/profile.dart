@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:ondoorstep/Login/otp.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ondoorstep/services/firestore.dart';
 
-class MyProfile extends StatefulWidget {
-  final String name;
-  final String email;
-  const MyProfile({Key? key, required this.name, required this.email})
+class CreateProfile extends StatefulWidget {
+  const CreateProfile({Key? key,})
       : super(key: key);
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'Email': email,
-      };
   @override
-  State<MyProfile> createState() => _MyProfileState();
+  State<CreateProfile> createState() => _CreateProfileState();
 }
 
-class _MyProfileState extends State<MyProfile> {
-  //TextEditingController countryController = TextEditingController();
+class _CreateProfileState extends State<CreateProfile> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.only(left: 25, right: 25),
+        margin: const EdgeInsets.only(left: 25, right: 25),
         alignment: Alignment.center,
         child: SingleChildScrollView(
           child: Column(
@@ -34,21 +29,21 @@ class _MyProfileState extends State<MyProfile> {
                 width: 300,
                 height: 300,
               ),
-              Text(
+              const Text(
                 "Register Yourself",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 "We need to Register your Details Before getting started!",
                 style: TextStyle(
                   fontSize: 16,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
@@ -59,17 +54,17 @@ class _MyProfileState extends State<MyProfile> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Expanded(
                         child: TextField(
                       controller: _nameController,
                       keyboardType: TextInputType.name,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: "Name",
                       ),
@@ -77,7 +72,7 @@ class _MyProfileState extends State<MyProfile> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
@@ -88,17 +83,17 @@ class _MyProfileState extends State<MyProfile> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Expanded(
                         child: TextField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: "Email",
                       ),
@@ -106,7 +101,7 @@ class _MyProfileState extends State<MyProfile> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               SizedBox(
@@ -114,18 +109,18 @@ class _MyProfileState extends State<MyProfile> {
                 height: 45,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        primary: Color.fromARGB(255, 61, 79, 119),
+                        primary: const Color.fromARGB(255, 61, 79, 119),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                    onPressed: () async {
-                      final user = MyProfile(
-                        name: _nameController.text,
-                        email: _emailController.text,
-                      );
-                      createUser(user);
-                      Navigator.pushNamed(context, 'dashboard');
+                    onPressed: () {
+                      Map<String, dynamic> userData = {
+                        'name': _nameController.text,
+                        'Email': _emailController.text,
+                      };
+                      FirestoreService().createUser(userData);
+                      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
                     },
-                    child: Text("submit")),
+                    child: const Text("submit")),
               )
             ],
           ),
@@ -134,9 +129,5 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 
-  Future createUser(MyProfile user) async {
-    final docUser = FirebaseFirestore.instance.collection('users').doc();
-    final json = user.toJson();
-    await docUser.set(json);
-  }
+  
 }
