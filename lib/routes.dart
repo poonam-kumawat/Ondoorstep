@@ -5,5 +5,5 @@ import 'package:ondoorstep/home/home.dart';
 var appRoutes = {
   '/': (context) => const HomeScreen(),
   '/login': (context) => const LoginScreen(),
-  '/otp': (context) => const OtpScreen(),
+  '/otp': (context) => const OtpScreen(verificationId: '',),
 };
