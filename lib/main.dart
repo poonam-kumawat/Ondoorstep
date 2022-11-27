@@ -2,10 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ondoorstep/Datahandler/appData.dart';
 import 'package:ondoorstep/routes.dart';
-import 'package:ondoorstep/dashboard/dashboard.dart';
-import 'package:ondoorstep/Login/login.dart';
-import 'package:ondoorstep/Login/otp.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,16 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => AppData(),
-      child: MaterialApp(
-        initialRoute: 'dashboard',
-        debugShowCheckedModeBanner: false,
-        routes: {
-          // 'phone': (context) => MyPhone(),
-          // 'verify': (context) => MyVerify()
-          'dashboard': (context) => Dashboard(),
-        },
-        //routes: appRoutes,
-      ),
+      child: MaterialApp(debugShowCheckedModeBanner: false, routes: appRoutes),
     );
   }
 }
