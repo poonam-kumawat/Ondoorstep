@@ -73,11 +73,22 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     });
   }
 
-  late Position currentPosition;
+  Position currentPosition = Position(
+      longitude: 0,
+      latitude: 0,
+      timestamp: null,
+      accuracy: 0,
+      altitude: 0,
+      heading: 0,
+      speed: 0,
+      speedAccuracy: 0);
+
   var geoLocator = Geolocator();
   double bottomPaddingOfMap = 0;
 
   void locatePostion() async {
+    LocationPermission permission;
+    permission = await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     currentPosition = position;
@@ -96,7 +107,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   late GoogleMapController newGoogleMapController;
   Completer<GoogleMapController> _controllerGooglemap = Completer();
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
+  static final CameraPosition _kGooglePlex = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -117,7 +128,6 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       children: [
         GoogleMap(
           padding: EdgeInsets.only(bottom: bottomPaddingOfMap),
-          //mapType: MapType.normal,
           myLocationButtonEnabled: true,
           initialCameraPosition: _kGooglePlex,
           myLocationEnabled: true,
@@ -130,6 +140,9 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             _controllerGooglemap.complete(controller);
             newGoogleMapController = controller;
             newGoogleMapController.setMapStyle(_mapStyle);
+            setState(() {
+              bottomPaddingOfMap = 300.0;
+            });
 
             locatePostion();
           },
@@ -152,18 +165,18 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(22.0),
                   boxShadow: [
-                    BoxShadow(
+                    const BoxShadow(
                         color: Color.fromARGB(255, 232, 230, 235),
                         blurRadius: 6.0,
                         spreadRadius: 0.5,
-                        offset: const Offset(0.7, 0.7))
+                        offset: Offset(0.7, 0.7))
                   ]),
               child: CircleAvatar(
                 backgroundColor: Colors.white,
                 radius: 20.0,
                 child: Icon(
                   (drawerOpen) ? Icons.menu : Icons.close,
-                  color: Color.fromARGB(255, 53, 64, 99),
+                  color: const Color.fromARGB(255, 53, 64, 99),
                 ),
               ),
             ),
@@ -180,7 +193,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             duration: const Duration(milliseconds: 160),
             child: Container(
               height: searchContainerHeight,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(18.0),
@@ -200,19 +213,19 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 6.9,
                       ),
-                      Text(
+                      const Text(
                         "Hi there,",
                         style: TextStyle(fontSize: 10.0),
                       ),
-                      Text(
+                      const Text(
                         "Where to,",
                         style:
                             TextStyle(fontSize: 20.0, fontFamily: 'Brand-Bold'),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20.0,
                       ),
                       GestureDetector(
@@ -220,7 +233,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                           var res = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SearchScreen()));
+                                  builder: (context) => const SearchScreen()));
                           if (res == "obtainDirection") {
                             displayRiderDetailsContainer();
                           }
@@ -230,7 +243,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5.0),
                             boxShadow: [
-                              BoxShadow(
+                              const BoxShadow(
                                 color: Color.fromARGB(255, 236, 237, 240),
                                 blurRadius: 6.0,
                                 spreadRadius: 0.5,
@@ -242,29 +255,29 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                             padding: const EdgeInsets.all(12.0),
                             child: Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.search,
                                   color: Color.fromARGB(255, 58, 81, 122),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10.0,
                                 ),
-                                Text("Search Drop Off"),
+                                const Text("Search Drop Off"),
                               ],
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 24.0,
                       ),
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.home,
                             color: Color.fromARGB(255, 58, 81, 122),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 12.0,
                           ),
                           Column(
@@ -277,13 +290,13 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                         .pickupLocation!
                                         .placeName
                                     : "Add Home",
-                                style: TextStyle(
-                                    fontSize: 18.0, fontFamily: 'Brand-Bold'),
+                                style: const TextStyle(
+                                    fontSize: 12.0, fontFamily: 'Brand-Bold'),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 4.0,
                               ),
-                              Text(
+                              const Text(
                                 "Your residential address",
                                 style: TextStyle(
                                     fontSize: 12.0, color: Colors.black54),
@@ -292,34 +305,34 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10.0,
                       ),
-                      DividerWidget(),
-                      SizedBox(
+                      const DividerWidget(),
+                      const SizedBox(
                         height: 16.0,
                       ),
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.work,
                             color: Color.fromARGB(255, 58, 81, 122),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 12.0,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 "Add Work",
                                 style: TextStyle(
                                     fontSize: 18.0, fontFamily: 'Brand-Bold'),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 4.0,
                               ),
-                              Text(
+                              const Text(
                                 "Your office address",
                                 style: TextStyle(
                                     fontSize: 12.0, color: Colors.black54),
@@ -343,7 +356,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             duration: const Duration(milliseconds: 160),
             child: Container(
               height: rideDetailContainer,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(16.0),
@@ -358,14 +371,14 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                 ],
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 17.0),
+                padding: const EdgeInsets.symmetric(vertical: 17.0),
                 child: Column(
                   children: [
                     Container(
                       width: double.infinity,
                       //color: Color.fromARGB(255, 240, 243, 242),
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Row(
                           children: [
                             Image.asset(
@@ -373,13 +386,13 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                               height: 70.0,
                               width: 80.0,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 16.0,
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   "Truck",
                                   style: TextStyle(
                                       fontSize: 18.0, fontFamily: "Brand-Bold"),
@@ -392,7 +405,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                       ((tripDirectionDetails != null)
                                           ? tripDirectionDetails!.durationText
                                           : ""),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 12.0,
                                       color: Color.fromARGB(255, 74, 111, 158)),
                                 ),
@@ -404,7 +417,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                 ((tripDirectionDetails.durationText != null)
                                     ? '\$${AssistantMethods.calculateFares(tripDirectionDetails)}'
                                     : ''),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: 'Brand-Bold',
                                     fontSize: 12.0,
                                     color: Color.fromARGB(255, 74, 111, 158)),
@@ -414,38 +427,38 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20.0,
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Row(
                         children: [
-                          Icon(
+                          const Icon(
                             FontAwesomeIcons.moneyCheck,
                             size: 18.0,
                             color: Colors.black54,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16.0,
                           ),
-                          Text("Cash"),
-                          SizedBox(
+                          const Text("Cash"),
+                          const SizedBox(
                             width: 6.0,
                           ),
-                          Icon(Icons.keyboard_arrow_down,
+                          const Icon(Icons.keyboard_arrow_down,
                               color: Colors.black54, size: 16.0),
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 24.0,
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Color.fromARGB(255, 58, 81, 122),
+                          primary: const Color.fromARGB(255, 58, 81, 122),
                           shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(24.0),
                           ),
@@ -455,14 +468,14 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
+                              const Text(
                                 "Request",
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     fontFamily: "Brand-Bold",
                                     color: Colors.white),
                               ),
-                              Icon(
+                              const Icon(
                                 FontAwesomeIcons.truck,
                                 color: Colors.white,
                                 size: 26.0,
@@ -486,7 +499,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
             color: Colors.white,
             borderRadius: BorderRadius.circular(22.0),
             boxShadow: [
-              BoxShadow(
+              const BoxShadow(
                 color: Color.fromARGB(255, 241, 243, 245),
                 blurRadius: 6.0,
                 spreadRadius: 0.5,
@@ -496,7 +509,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
           ),
           height: 250.0,
           child: Column(children: [
-            SizedBox(
+            const SizedBox(
               height: 12.0,
             ),
           ]),
@@ -513,7 +526,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     var dropOffLatLng = LatLng(finalPos!.latitude, finalPos.longitude);
     showDialog(
         context: context,
-        builder: (BuildContext context) => AlertDialog(
+        builder: (BuildContext context) => const AlertDialog(
               title: Text("OnDoorStep"),
               content: Text("Pickup Location"),
             ));
@@ -540,8 +553,8 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     polylineSet.clear();
     setState(() {
       Polyline polyline = Polyline(
-          color: Color.fromARGB(255, 58, 81, 122),
-          polylineId: PolylineId("PolylineID"),
+          color: const Color.fromARGB(255, 58, 81, 122),
+          polylineId: const PolylineId("PolylineID"),
           jointType: JointType.round,
           points: pLineCoordinates,
           width: 5,
@@ -576,7 +589,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       infoWindow:
           InfoWindow(title: initialPos.placeName, snippet: "My Location"),
       position: pickUpLatLng,
-      markerId: MarkerId("pickUpId"),
+      markerId: const MarkerId("pickUpId"),
     );
 
     Marker dropOffLocMarker = Marker(
@@ -584,7 +597,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
       infoWindow:
           InfoWindow(title: finalPos.placeName, snippet: "DropOff Location"),
       position: dropOffLatLng,
-      markerId: MarkerId("dropOffId"),
+      markerId: const MarkerId("dropOffId"),
     );
 
     setState(() {
@@ -598,7 +611,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         radius: 12,
         strokeWidth: 4,
         strokeColor: Colors.blueAccent,
-        circleId: CircleId("pickUpId"));
+        circleId: const CircleId("pickUpId"));
 
     Circle dropOffLocCircle = Circle(
         fillColor: Colors.deepPurple,
@@ -606,7 +619,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
         radius: 12,
         strokeWidth: 4,
         strokeColor: Colors.deepPurple,
-        circleId: CircleId("dropOffId"));
+        circleId: const CircleId("dropOffId"));
 
     setState(() {
       circlesSet.add(pickUpLocCircle);
