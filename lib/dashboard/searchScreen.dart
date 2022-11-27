@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ondoorstep/Datahandler/appData.dart';
+import 'package:ondoorstep/dashboard/book_transport.dart';
+import 'package:ondoorstep/datahanlder/appData.dart';
 import 'package:ondoorstep/maps/Models/address.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +12,7 @@ import '../maps/requestAssistance.dart';
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
   @override
+  // ignore: library_private_types_in_public_api
   _SearchScreenState createState() => _SearchScreenState();
 }
 
@@ -152,7 +154,7 @@ class _SearchScreenState extends State<SearchScreen> {
           const SizedBox(
             height: 10.0,
           ),
-          (placePredictionList.length > 0)
+          (placePredictionList.isNotEmpty)
               ? Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 8.0, horizontal: 16.0),
@@ -194,12 +196,12 @@ class _SearchScreenState extends State<SearchScreen> {
         setState(() {
           placePredictionList = placesList;
         });
-        //return placesList;
       }
     }
   }
 }
 
+// ignore: must_be_immutable
 class PredictionTile extends StatelessWidget {
   final PlacePrediction placePrediction;
 
@@ -212,69 +214,60 @@ class PredictionTile extends StatelessWidget {
     return TextButton(
       //padding: const EdgeInsets.all(0.0),
       onPressed: () {
-        getPlaceAddressDetails(placePrediction.place_id, context);
+        _getPlaceAddressDetails(placePrediction.place_id, context);
       },
-      child: Container(
-        child: Column(
-          children: [
+      child: Column(
+        children: [
+          const SizedBox(
+            width: 10.0,
+          ),
+          Row(children: [
+            const Icon(Icons.add_location),
             const SizedBox(
-              width: 10.0,
+              width: 14.0,
             ),
-            Row(children: [
-              const Icon(Icons.add_location),
-              const SizedBox(
-                width: 14.0,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  Text(
+                    placePrediction.main_text,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                  const SizedBox(
+                    height: 2.0,
+                  ),
+                  Text(
+                    placePrediction.secondary_text,
+                    overflow: TextOverflow.ellipsis,
+                    style:
+                        const TextStyle(fontSize: 12.0, color: Colors.grey),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                ],
               ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 8.0,
-                    ),
-                    Text(
-                      placePrediction.main_text,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 16.0),
-                    ),
-                    const SizedBox(
-                      height: 2.0,
-                    ),
-                    Text(
-                      placePrediction.secondary_text,
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                          const TextStyle(fontSize: 12.0, color: Colors.grey),
-                    ),
-                    const SizedBox(
-                      height: 8.0,
-                    ),
-                  ],
-                ),
-              ),
-            ]),
-            const SizedBox(
-              width: 10.0,
             ),
-          ],
-        ),
+          ]),
+          const SizedBox(
+            width: 10.0,
+          ),
+        ],
       ),
     );
   }
 
-  void getPlaceAddressDetails(String placeId, BuildContext context) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text("OndoorStep"),
-        content: Text("Setting Location Please wait......"),
-      ),
-    );
+  void _getPlaceAddressDetails(String placeId, BuildContext context) async { 
     String placeId = placePrediction.place_id;
     String placeDetailsUrl =
         'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$mapKey';
     var res = await RequestAssistant.getRequest(placeDetailsUrl);
-    Navigator.pop(context);
+    // ignore: use_build_context_synchronously
     if (res == "failed") {
       return;
     }
@@ -290,10 +283,11 @@ class PredictionTile extends StatelessWidget {
       address.placeId = placeId;
       address.latitude = res['result']['geometry']['location']['lat'];
       address.longitude = res['result']['geometry']['location']['lng'];
+      // ignore: use_build_context_synchronously
       Provider.of<AppData>(context, listen: false)
           .updateDropOffAddress(address);
-      print('This is drop off location:: ${address.placeName}');
-      Navigator.pop(context, 'obtainDirection');
     }
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const BookVehicle()));
   }
 }

@@ -3,7 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ondoorstep/maps/requestAssistance.dart';
 import 'package:provider/provider.dart';
 
-import '../Datahandler/appData.dart';
+import '../datahanlder/appData.dart';
 import 'Models/address.dart';
 import 'Models/directionsDetails.dart';
 import 'configmaps.dart';
@@ -13,11 +13,6 @@ class AssistantMethods {
       Position position, context) async {
     String placeAddress = "";
     String st1, st2, st3, st4;
-    // var connectivityResult = await Connectivity().checkConnectivity();
-    // if (connectivityResult != ConnectivityResult.mobile &&
-    //     connectivityResult != ConnectivityResult.wifi) {
-    //   return placeAddress;
-    // }
     String url =
         "https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$mapKey";
     var response = await RequestAssistant.getRequest(url);
@@ -81,7 +76,7 @@ class AssistantMethods {
 
     //Local currency
     //1$ = 160 INR
-    double totalLocalAmount = totalFareAmount * 160;
+    double totalLocalAmount = (totalFareAmount * 160) / 6;
 
     return totalLocalAmount.truncate();
   }

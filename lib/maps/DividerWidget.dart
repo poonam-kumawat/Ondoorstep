@@ -6,9 +6,9 @@ class DividerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
-        children: [
+        children: const [
           Expanded(
             child: Divider(
               color: Color.fromARGB(255, 223, 221, 221),
