@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ondoorstep/auth/otp.dart';
+import 'package:ondoorstep/services/firestore.dart';
 
 class AuthService {
   final userStream = FirebaseAuth.instance.authStateChanges();
@@ -43,8 +44,17 @@ class AuthService {
         smsCode: otp,
       );
       await FirebaseAuth.instance.signInWithCredential(credential);
+
+      final currentUser = FirebaseAuth.instance.currentUser;
+
       // ignore: use_build_context_synchronously
-      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+      if(await FirestoreService().checkUser(currentUser!.uid)){
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+      }else{
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pushNamedAndRemoveUntil('/profile', (route) => false);
+      }
     } catch (e) {
       print(e);
     }

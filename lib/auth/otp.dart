@@ -12,8 +12,6 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     final defaultPinTheme = PinTheme(
