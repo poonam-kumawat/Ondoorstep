@@ -44,6 +44,7 @@ class AuthService {
         smsCode: otp,
       );
       await FirebaseAuth.instance.signInWithCredential(credential);
+
       final currentUser = FirebaseAuth.instance.currentUser;
 
       // ignore: use_build_context_synchronously

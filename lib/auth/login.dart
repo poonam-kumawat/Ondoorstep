@@ -16,6 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController countryController = TextEditingController();
   bool _isLoading = false;
+  
   @override
   void initState() {
     // ignore: todo
