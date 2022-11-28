@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -12,6 +14,8 @@ import 'package:ondoorstep/maps/Models/directionsDetails.dart';
 import 'package:ondoorstep/maps/assistantMethods.dart';
 import 'package:ondoorstep/maps/configmaps.dart';
 import 'package:ondoorstep/maps/requestAssistance.dart';
+import 'package:ondoorstep/services/auth.dart';
+import 'package:ondoorstep/services/firestore.dart';
 import 'package:provider/provider.dart';
 
 class BookVehicle extends StatefulWidget {
@@ -382,6 +386,8 @@ class _BookVehicleState extends State<BookVehicle>
                                 ),
                                 onPressed: () {
                                   _showPolylines();
+                                  _pushToDB();
+
                                   setState(() {
                                     isLookup = true;
                                   });
@@ -525,5 +531,22 @@ class _BookVehicleState extends State<BookVehicle>
     }
     newGoogleMapController
         .animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
+  }
+
+  void _pushToDB() {
+    Map<String, dynamic> orderData = {
+      'otp': Random().nextInt(999999).toString().padLeft(6, '0'),
+      'userId': AuthService().user!.uid,
+    };
+    var initialPos =
+        Provider.of<AppData>(context, listen: false).pickupLocation;
+    var finalPos = Provider.of<AppData>(context, listen: false).dropoffLocation;
+    GeoPoint pickup = GeoPoint(initialPos!.latitude, initialPos!.longitude);
+    GeoPoint dropoff = GeoPoint(finalPos!.latitude, finalPos!.longitude);
+    orderData['pickup'] = pickup;
+    orderData['dropoff'] = dropoff;
+    orderData['status'] = 'waiting';
+    orderData['createdAt'] = DateTime.now();
+    FirestoreService().createOrder(orderData);
   }
 }
