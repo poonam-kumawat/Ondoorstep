@@ -48,12 +48,13 @@ class AuthService {
       final currentUser = FirebaseAuth.instance.currentUser;
 
       // ignore: use_build_context_synchronously
-      if(await FirestoreService().checkUser(currentUser!.uid)){
+      if (await FirestoreService().checkUser(currentUser!.uid)) {
         // ignore: use_build_context_synchronously
         Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-      }else{
+      } else {
         // ignore: use_build_context_synchronously
-        Navigator.of(context).pushNamedAndRemoveUntil('/profile', (route) => false);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/register', (route) => false);
       }
     } catch (e) {
       print(e);

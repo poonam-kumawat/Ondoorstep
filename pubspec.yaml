@@ -39,6 +39,18 @@ dependencies:
   pinput: ^2.2.16
   firebase_auth: ^4.1.1
   cloud_firestore: ^4.1.0
+  google_maps_flutter: ^2.2.1
+  geolocator: ^9.0.2
+  provider: ^6.0.4
+  http: ^0.13.5
+  flutter_polyline_points: ^1.0.0
+  font_awesome_flutter: ^10.2.1
+  animated_text_kit: ^4.2.2
+  location: ^4.4.0
+  permission_handler: ^10.2.0
+  json_annotation: ^4.7.0
+  flutter_dotenv: ^5.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -49,6 +61,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  json_serializable: ^6.5.4
+  build_runner: ^2.3.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

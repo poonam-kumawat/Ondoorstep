@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text('Error'),
             );
           } else if (snapshot.hasData) {
-            return const Dashboard();
+            return Dashboard();
           } else {
             return const LoginScreen();
           }
