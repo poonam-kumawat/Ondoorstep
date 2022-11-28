@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ondoorstep/maps/Models/address.dart';
 
 class AppData extends ChangeNotifier {
-  late Address pickupLocation, dropoffLocation;
+  Address? pickupLocation, dropoffLocation;
   void updatePickupAddress(Address pickupAddress) {
     pickupLocation = pickupAddress;
     notifyListeners();

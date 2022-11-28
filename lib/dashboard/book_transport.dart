@@ -78,7 +78,6 @@ class _BookVehicleState extends State<BookVehicle>
     });
     _getLiveLocation();
     _getTripDirection();
-    
   }
 
   @override
@@ -176,7 +175,7 @@ class _BookVehicleState extends State<BookVehicle>
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 17.0),
                         child: Column(
-                          children:  [
+                          children: [
                             const Center(
                               child: Text('Looking For Driver',
                                   style: TextStyle(
@@ -184,16 +183,22 @@ class _BookVehicleState extends State<BookVehicle>
                                       fontFamily: 'Brand-Bold')),
                             ),
                             const SizedBox(height: 22.0),
-                            ElevatedButton(onPressed: () {
-                              setState(() {
-                                isLookup = false;
-                              });
-                            }, child: const Text('X')),
-                            const SizedBox(height: 22.0,),
+                            ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isLookup = false;
+                                  });
+                                },
+                                child: const Text('X')),
+                            const SizedBox(
+                              height: 22.0,
+                            ),
                             LinearProgressIndicator(
-                              value: AnimationController(vsync: this, duration: const Duration(seconds: 5)).value,
+                              value: AnimationController(
+                                      vsync: this,
+                                      duration: const Duration(seconds: 5))
+                                  .value,
                             )
-                            
                           ],
                         ),
                       ),
@@ -242,7 +247,7 @@ class _BookVehicleState extends State<BookVehicle>
                                       width: 80.0,
                                     ),
                                     const SizedBox(
-                                      width: 30.0,
+                                      width: 10.0,
                                     ),
                                     Column(
                                       crossAxisAlignment:
@@ -267,7 +272,7 @@ class _BookVehicleState extends State<BookVehicle>
                                         ),
                                       ],
                                     ),
-                                    _widthSizedBox(150),
+                                    _widthSizedBox(30),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,

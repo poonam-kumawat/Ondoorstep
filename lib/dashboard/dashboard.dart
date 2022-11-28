@@ -245,11 +245,11 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                                   .pickupLocation !=
                                               null
                                           ? Provider.of<AppData>(context)
-                                              .pickupLocation
+                                              .pickupLocation!
                                               .placeName
                                           : "Add Home",
                                       style: const TextStyle(
-                                          fontSize: 14.0,
+                                          fontSize: 12.0,
                                           fontFamily: 'Brand-Bold'),
                                     ),
                                     _heightSizedBox(4),
