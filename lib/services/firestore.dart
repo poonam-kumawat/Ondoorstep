@@ -19,7 +19,7 @@ class FirestoreService{
   }
 
   Future<AppUser> getUser(String uid) async {
-    var userRef = await firebase.collection('users').doc(uid);
+    var userRef = firebase.collection('users').doc(uid);
     var user = await userRef.get();
     return AppUser.fromJson(user.data() ?? {});
   }

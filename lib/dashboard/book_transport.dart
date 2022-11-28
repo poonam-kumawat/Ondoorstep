@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -30,6 +31,7 @@ class _BookVehicleState extends State<BookVehicle>
   late GoogleMapController newGoogleMapController;
   final Completer<GoogleMapController> _controllerGooglemap = Completer();
   bool isLookup = false;
+  List<LatLng> pLineCoordinates = [];
 
   Future<void> _getLiveLocation() async {
     currentPosition = await Geolocator.getCurrentPosition(
@@ -41,8 +43,6 @@ class _BookVehicleState extends State<BookVehicle>
     GoogleMapController googleMapController = await _controllerGooglemap.future;
     googleMapController
         .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-    String address = await AssistantMethods.searchCoordinateAddress(
-        currentPosition, context);
     String placeAddress = "";
     String st1, st2, st3, st4;
     String url =
@@ -54,7 +54,7 @@ class _BookVehicleState extends State<BookVehicle>
       st2 = response["results"][0]["address_components"][3]["long_name"];
       st3 = response["results"][0]["address_components"][4]["long_name"];
       st4 = response["results"][0]["address_components"][5]["long_name"];
-      placeAddress = st1 + " , " + st2 + " , " + st3 + " , " + st4;
+      placeAddress = "$st1 , $st2 , $st3 , $st4";
       Address userPickupAddress = Address(
           placeFormattedAddress: ' ',
           placeId: '  ',
@@ -134,6 +134,18 @@ class _BookVehicleState extends State<BookVehicle>
             },
           ),
           Positioned(
+              top: 50,
+              left: 20,
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: IconButton(
+                    onPressed: () {
+                      _resetApp();
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.close)),
+              )),
+          Positioned(
             bottom: 320,
             right: 20,
             child: GestureDetector(
@@ -175,36 +187,40 @@ class _BookVehicleState extends State<BookVehicle>
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 17.0),
                         child: Column(
-                          children: [
-                            const Center(
-                              child: Text('Looking For Driver',
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontFamily: 'Brand-Bold')),
-                            ),
-                            const SizedBox(height: 22.0),
-                            ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isLookup = false;
-                                  });
-                                },
-                                child: const Text('X')),
-                            const SizedBox(
-                              height: 22.0,
-                            ),
-                            LinearProgressIndicator(
-                              value: AnimationController(
-                                      vsync: this,
-                                      duration: const Duration(seconds: 5))
-                                  .value,
-                            )
-                          ],
-                        ),
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "Getting Driver for your Pickup",
+                                style: TextStyle(fontSize: 30),
+                              ),
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  const SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 20,
+                                    ),
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isLookup = false;
+                                          polylineSet.clear();
+                                          pLineCoordinates.clear();
+                                        });
+                                      },
+                                      icon: const Icon(Icons.close))
+                                ],
+                              ),
+                            ]),
                       ),
                     ),
-                  ),
-                )
+                  ))
               : Positioned(
                   bottom: 0.0,
                   left: 0.0,
@@ -278,6 +294,7 @@ class _BookVehicleState extends State<BookVehicle>
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
+                                          // ignore: unnecessary_null_comparison
                                           ((tripDirectionDetails.durationText !=
                                                   null)
                                               ? '\u{20B9}${AssistantMethods.calculateFares(tripDirectionDetails)}'
@@ -364,6 +381,7 @@ class _BookVehicleState extends State<BookVehicle>
                                   ),
                                 ),
                                 onPressed: () {
+                                  _showPolylines();
                                   setState(() {
                                     isLookup = true;
                                   });
@@ -448,5 +466,64 @@ class _BookVehicleState extends State<BookVehicle>
       circlesSet.add(pickUpLocCircle);
       circlesSet.add(dropOffLocCircle);
     });
+  }
+
+  void _resetApp() {
+    setState(() {
+      polylineSet.clear();
+      markersSet.clear();
+      circlesSet.clear();
+      pLineCoordinates.clear();
+    });
+  }
+
+  void _showPolylines() async {
+    var initialPos =
+        Provider.of<AppData>(context, listen: false).pickupLocation;
+    var finalPos = Provider.of<AppData>(context, listen: false).dropoffLocation;
+    var pickUpLatLng = LatLng(initialPos!.latitude, initialPos.longitude);
+    var dropOffLatLng = LatLng(finalPos!.latitude, finalPos.longitude);
+    var details = await AssistantMethods.obtainPlaceDirectionDetails(
+        pickUpLatLng, dropOffLatLng);
+    PolylinePoints polylinePoints = PolylinePoints();
+    List<PointLatLng> decodedPolyLinePointsResult =
+        polylinePoints.decodePolyline(details!.encodedPoints);
+    pLineCoordinates.clear();
+    if (decodedPolyLinePointsResult.isNotEmpty) {
+      for (var pointLatLng in decodedPolyLinePointsResult) {
+        pLineCoordinates
+            .add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+      }
+    }
+    setState(() {
+      Polyline polyline = Polyline(
+          color: const Color.fromARGB(255, 58, 81, 122),
+          polylineId: const PolylineId("PolylineID"),
+          jointType: JointType.round,
+          points: pLineCoordinates,
+          width: 5,
+          startCap: Cap.roundCap,
+          endCap: Cap.roundCap);
+      polylineSet.add(polyline);
+    });
+    LatLngBounds latLngBounds;
+    if (pickUpLatLng.latitude > dropOffLatLng.latitude &&
+        pickUpLatLng.longitude > dropOffLatLng.longitude) {
+      latLngBounds =
+          LatLngBounds(southwest: dropOffLatLng, northeast: pickUpLatLng);
+    } else if (pickUpLatLng.longitude > dropOffLatLng.longitude) {
+      latLngBounds = LatLngBounds(
+          southwest: LatLng(pickUpLatLng.latitude, dropOffLatLng.longitude),
+          northeast: LatLng(dropOffLatLng.latitude, pickUpLatLng.longitude));
+    } else if (pickUpLatLng.latitude > dropOffLatLng.latitude) {
+      latLngBounds = LatLngBounds(
+          southwest: LatLng(dropOffLatLng.latitude, pickUpLatLng.longitude),
+          northeast: LatLng(pickUpLatLng.latitude, dropOffLatLng.longitude));
+    } else {
+      latLngBounds =
+          LatLngBounds(southwest: pickUpLatLng, northeast: dropOffLatLng);
+    }
+    newGoogleMapController
+        .animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
   }
 }
