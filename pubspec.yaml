@@ -49,6 +49,7 @@ dependencies:
   location: ^4.4.0
   permission_handler: ^10.2.0
   json_annotation: ^4.7.0
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
