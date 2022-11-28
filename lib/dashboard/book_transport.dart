@@ -264,7 +264,7 @@ class _BookVehicleState extends State<BookVehicle>
                                     Image.asset(
                                       "assets/truck.png",
                                       height: 70.0,
-                                      width: 80.0,
+                                      width: 60.0,
                                     ),
                                     const SizedBox(
                                       width: 10.0,
@@ -276,7 +276,7 @@ class _BookVehicleState extends State<BookVehicle>
                                         const Text(
                                           "Truck",
                                           style: TextStyle(
-                                              fontSize: 18.0,
+                                              fontSize: 14.0,
                                               fontFamily: "Brand-Bold"),
                                         ),
                                         _heightSizedBox(4.0),
@@ -305,7 +305,7 @@ class _BookVehicleState extends State<BookVehicle>
                                               : ''),
                                           style: const TextStyle(
                                               fontFamily: 'Brand-Bold',
-                                              fontSize: 24.0,
+                                              fontSize: 18.0,
                                               color: Color.fromARGB(
                                                   255, 74, 111, 158)),
                                         ),
@@ -314,7 +314,78 @@ class _BookVehicleState extends State<BookVehicle>
                                           // ignore: unnecessary_null_comparison
                                           "\u{20B9}15.0/KM",
                                           style: TextStyle(
+                                              fontSize: 12.0,
+                                              color: Color.fromARGB(
+                                                  255, 74, 111, 158)),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              //color: Color.fromARGB(255, 240, 243, 242),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      "assets/truck2.png",
+                                      height: 70.0,
+                                      width: 60.0,
+                                    ),
+                                    const SizedBox(
+                                      width: 10.0,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Pickup Truck",
+                                          style: TextStyle(
                                               fontSize: 14.0,
+                                              fontFamily: "Brand-Bold"),
+                                        ),
+                                        _heightSizedBox(4.0),
+                                        Text(
+                                          // ignore: unnecessary_null_comparison
+                                          " ${(tripDirectionDetails != null) ? tripDirectionDetails.distanceText
+                                              // ignore: unnecessary_null_comparison
+                                              : ""} - ${(tripDirectionDetails != null) ? tripDirectionDetails.durationText : ""}",
+                                          style: const TextStyle(
+                                              fontSize: 12.0,
+                                              color: Color.fromARGB(
+                                                  255, 74, 111, 158)),
+                                        ),
+                                      ],
+                                    ),
+                                    _widthSizedBox(30),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          // ignore: unnecessary_null_comparison
+                                          ((tripDirectionDetails.durationText !=
+                                                  null)
+                                              ? '\u{20B9}${AssistantMethods.calculateFares(tripDirectionDetails)}'
+                                              : ''),
+                                          style: const TextStyle(
+                                              fontFamily: 'Brand-Bold',
+                                              fontSize: 18.0,
+                                              color: Color.fromARGB(
+                                                  255, 74, 111, 158)),
+                                        ),
+                                        _heightSizedBox(4.0),
+                                        const Text(
+                                          // ignore: unnecessary_null_comparison
+                                          "\u{20B9}10.0/KM",
+                                          style: TextStyle(
+                                              fontSize: 12.0,
                                               color: Color.fromARGB(
                                                   255, 74, 111, 158)),
                                         ),

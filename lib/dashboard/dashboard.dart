@@ -41,7 +41,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   Set<Circle> circlesSet = {};
 
   double rideDetailContainer = 0;
-  double searchContainerHeight = 300.0;
+  double searchContainerHeight = 320.0;
 
   Position currentPosition = const Position(
       longitude: 0,
