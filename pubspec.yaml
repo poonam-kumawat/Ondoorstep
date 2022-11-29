@@ -50,6 +50,7 @@ dependencies:
   permission_handler: ^10.2.0
   json_annotation: ^4.7.0
   flutter_dotenv: ^5.0.2
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:

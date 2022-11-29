@@ -195,7 +195,7 @@ class _BookVehicleState extends State<BookVehicle>
                             children: [
                               const Text(
                                 "Getting Driver for your Pickup",
-                                style: TextStyle(fontSize: 30),
+                                style: TextStyle(fontSize: 20),
                               ),
                               const SizedBox(
                                 height: 40,
@@ -204,10 +204,10 @@ class _BookVehicleState extends State<BookVehicle>
                                 alignment: Alignment.center,
                                 children: [
                                   const SizedBox(
-                                    width: 100,
-                                    height: 100,
+                                    width: 60,
+                                    height: 60,
                                     child: CircularProgressIndicator(
-                                      strokeWidth: 20,
+                                      strokeWidth: 10,
                                     ),
                                   ),
                                   IconButton(
