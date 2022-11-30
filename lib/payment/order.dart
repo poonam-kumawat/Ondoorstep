@@ -35,11 +35,12 @@ class _OrdersState extends State<Orders> {
                         title: Text(snapshot.data![index]['status']),
                         subtitle: FutureBuilder(
                           builder: (context, snapshot) {
-                            if(snapshot.hasData){
+                            if (snapshot.hasData) {
                               return Text(snapshot.data.toString());
-                            }else{
+                            } else {
                               return const Text('loading');
-                            }},
+                            }
+                          },
                           future: _getAddress(snapshot.data![index]['dropoff']),
                         )));
               },
@@ -69,7 +70,7 @@ class _OrdersState extends State<Orders> {
       st4 = response["results"][0]["address_components"][5]["long_name"];
       placeAddress = "$st1 , $st2 , $st3 , $st4";
       return placeAddress;
-    }else{
+    } else {
       return 'failed';
     }
   }

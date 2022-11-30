@@ -21,7 +21,7 @@ class AppUser {
 }
 
 @JsonSerializable()
-class Bookorder{
+class Bookorder {
   late final String id;
   final String otp;
   final String userId;
@@ -46,7 +46,7 @@ class Bookorder{
 }
 
 @JsonSerializable()
-class Location  {
+class Location {
   final double latitute;
   final double longitude;
 
