@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:ondoorstep/services/firestore.dart';
 
 class CreateProfile extends StatefulWidget {
-  const CreateProfile({Key? key,})
-      : super(key: key);
+  const CreateProfile({
+    Key? key,
+  }) : super(key: key);
   @override
   State<CreateProfile> createState() => _CreateProfileState();
 }
@@ -11,8 +12,6 @@ class CreateProfile extends StatefulWidget {
 class _CreateProfileState extends State<CreateProfile> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -115,10 +114,11 @@ class _CreateProfileState extends State<CreateProfile> {
                     onPressed: () {
                       Map<String, dynamic> userData = {
                         'name': _nameController.text,
-                        'Email': _emailController.text,
+                        'email': _emailController.text,
                       };
                       FirestoreService().createUser(userData);
-                      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                      Navigator.of(context)
+                          .pushNamedAndRemoveUntil('/', (route) => false);
                     },
                     child: const Text("submit")),
               )
@@ -128,6 +128,4 @@ class _CreateProfileState extends State<CreateProfile> {
       ),
     );
   }
-
-  
 }

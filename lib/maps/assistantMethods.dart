@@ -69,6 +69,7 @@ class AssistantMethods {
 
   static int calculateFares(DirectionsDetails directionsDetails) {
     //in terms USD
+
     double timeTraveledFare = (directionsDetails.durationValue / 60) * 0.20;
     double distanceTraveledFare =
         (directionsDetails.distanceValue / 1000) * 0.20;

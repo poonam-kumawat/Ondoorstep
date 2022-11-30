@@ -12,6 +12,7 @@ import 'package:ondoorstep/maps/Models/directionsDetails.dart';
 import 'package:ondoorstep/maps/assistantMethods.dart';
 import 'package:ondoorstep/maps/configmaps.dart';
 import 'package:ondoorstep/maps/requestAssistance.dart';
+import 'package:ondoorstep/profile/fetch_profile.dart';
 import 'package:ondoorstep/services/auth.dart';
 import 'package:ondoorstep/services/firestore.dart';
 import 'package:ondoorstep/services/models.dart';
@@ -103,6 +104,21 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                     });
                   },
                 ),
+                Positioned(
+                    top: 50,
+                    left: 20,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const FetchProfile()));
+                          },
+                          icon: const Icon(Icons.account_circle)),
+                    )),
                 Positioned(
                   bottom: 320,
                   right: 20,

@@ -36,4 +36,13 @@ class FirestoreService {
         .doc(orderId)
         .set({'orderId': orderId});
   }
+
+  Future<void> completeApplication(
+      String uid, String name, String Email, String mobile) async {
+    await firebase.collection('users').doc(uid).set({
+      'name': name,
+      'Eamil': Email,
+      'mobile': mobile,
+    }, SetOptions(merge: true));
+  }
 }
