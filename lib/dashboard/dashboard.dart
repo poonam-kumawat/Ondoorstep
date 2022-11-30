@@ -177,7 +177,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: name ?? '',
+                                  text: name,
                                   style: const TextStyle(
                                     fontSize: 22,
                                     fontFamily: 'Brand-Bold',
@@ -361,8 +361,6 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     GoogleMapController googleMapController = await _controllerGooglemap.future;
     googleMapController
         .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-    String address = await AssistantMethods.searchCoordinateAddress(
-        currentPosition, context);
     String placeAddress = "";
     String st1, st2, st3, st4;
     String url =

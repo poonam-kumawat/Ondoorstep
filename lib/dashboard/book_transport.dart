@@ -612,8 +612,8 @@ class _BookVehicleState extends State<BookVehicle>
     var initialPos =
         Provider.of<AppData>(context, listen: false).pickupLocation;
     var finalPos = Provider.of<AppData>(context, listen: false).dropoffLocation;
-    GeoPoint pickup = GeoPoint(initialPos!.latitude, initialPos!.longitude);
-    GeoPoint dropoff = GeoPoint(finalPos!.latitude, finalPos!.longitude);
+    GeoPoint pickup = GeoPoint(initialPos!.latitude, initialPos.longitude);
+    GeoPoint dropoff = GeoPoint(finalPos!.latitude, finalPos.longitude);
     orderData['pickup'] = pickup;
     orderData['dropoff'] = dropoff;
     orderData['status'] = 'waiting';

@@ -34,7 +34,7 @@ class FirestoreService {
         .doc(AuthService().user!.uid)
         .collection('orders')
         .doc(orderId)
-        .set({'orderId': orderId});
+        .set(orderData);
   }
 
   Future<void> completeApplication(
@@ -45,4 +45,12 @@ class FirestoreService {
       'mobile': mobile,
     }, SetOptions(merge: true));
   }
+
+  Future<List<Map<String, dynamic>>> getOrders() async {
+    var ordersRef = firebase.collection('users').doc(AuthService().user!.uid).collection('orders');
+    var orderData = await ordersRef.get();
+    var orders = orderData.docs.map((e) => e.data()).toList();
+    print(orders);
+    return orders;
+  } 
 }

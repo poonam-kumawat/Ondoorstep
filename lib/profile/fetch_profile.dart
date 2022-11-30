@@ -44,6 +44,7 @@ class _FetchProfileState extends State<FetchProfile> {
                   const SizedBox(
                     height: 10,
                   ),
+                  
                 ],
               ));
             } else {
@@ -60,7 +61,7 @@ class _FetchProfileState extends State<FetchProfile> {
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: Container(
-            margin: new EdgeInsets.only(top: 100.0),
+            margin: const EdgeInsets.only(top: 100.0),
             height: 100,
             width: 100,
             decoration: const BoxDecoration(
@@ -79,7 +80,7 @@ class _FetchProfileState extends State<FetchProfile> {
   Widget _profileName(String name) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.80, //80% of width,
-      margin: new EdgeInsets.only(bottom: 50),
+      margin: const EdgeInsets.only(bottom: 50),
       child: Center(
         child: Text(
           name,
@@ -90,7 +91,7 @@ class _FetchProfileState extends State<FetchProfile> {
   }
 
   Widget _heading(String heading) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.80, //80% of width,
       child: Text(
         heading,
@@ -115,7 +116,7 @@ class _FetchProfileState extends State<FetchProfile> {
               ),
               title: Text(user.name),
             ),
-            Divider(
+            const Divider(
               height: 10,
               color: Colors.black87,
             ),
@@ -125,7 +126,7 @@ class _FetchProfileState extends State<FetchProfile> {
               title: Text(user.email),
             ),
 
-            Divider(
+            const Divider(
               height: 10,
               color: Colors.black87,
             ),
@@ -133,6 +134,20 @@ class _FetchProfileState extends State<FetchProfile> {
               leading: const Icon(Icons.call,
                   color: Color.fromARGB(255, 72, 76, 126)),
               title: Text(user.phoneNumber),
+            ),
+            const Divider(
+              height: 10,
+              color: Colors.black87,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed('/orders');
+              },
+              child: const ListTile(
+                leading: Icon(Icons.list,
+                    color: Color.fromARGB(255, 72, 76, 126)),
+                title: Text('Orders'),
+              ),
             ),
           ],
         ),
