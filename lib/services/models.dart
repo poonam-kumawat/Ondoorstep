@@ -7,12 +7,14 @@ class AppUser {
   final String name;
   final String email;
   final String phoneNumber;
+  final bool driver;
 
   AppUser({
     this.id = '',
     this.name = '',
     this.email = '',
     this.phoneNumber = '',
+    this.driver = true,
   });
 
   factory AppUser.fromJson(Map<String, dynamic> json) =>

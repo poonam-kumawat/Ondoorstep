@@ -60,4 +60,12 @@ class AuthService {
       print(e);
     }
   }
+
+  Future<bool> isDriver() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    final uid = currentUser!.uid;
+    final user = await FirestoreService().getUser(uid);
+    print('is driver: ${user.driver}');
+    return user.driver;
+  }
 }

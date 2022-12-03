@@ -11,6 +11,7 @@ AppUser _$AppUserFromJson(Map<String, dynamic> json) => AppUser(
       name: json['name'] as String? ?? '',
       email: json['email'] as String? ?? '',
       phoneNumber: json['phoneNumber'] as String? ?? '',
+      driver: json['driver'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$AppUserToJson(AppUser instance) => <String, dynamic>{
@@ -18,6 +19,7 @@ Map<String, dynamic> _$AppUserToJson(AppUser instance) => <String, dynamic>{
       'name': instance.name,
       'email': instance.email,
       'phoneNumber': instance.phoneNumber,
+      'driver': instance.driver,
     };
 
 Bookorder _$BookorderFromJson(Map<String, dynamic> json) => Bookorder(
